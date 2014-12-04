@@ -1,7 +1,6 @@
 function featData = featExtract(rdata)
 %normalized chaincode feature extractor 
-    grey_data = im_gray(rdata); % not necessary with this data, already greyscale
-    box_data  = im_box(grey_data,1,0); %remove empty empty border columns and rows 
+    box_data  = im_box(rdata,1,0); %remove empty empty border columns and rows 
     p36_data  = im_resize(box_data,[36 36]); % resize to 36*36
     dataset   = prdataset(p36_data);%convert to dataset
     featData  = [];

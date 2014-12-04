@@ -9,15 +9,14 @@ function BWlist = contour(I)
 	%figure, imshow(BWs), title('binary gradient mask');
 
 	%Dilate the Image
-	se90 = strel('line', 3, 90);
-	se0 = strel('line', 3, 0);
-	BWsdil = imdilate(BWs, [se90 se0]);
+    se = strel('disk',2, 0); %changed from line method used in tutorial because seems to give better results
+    BWsdil = imdilate(BWs, se);
+	%BWsdil = imdilate(BWs, [se90 se0]);
 	%figure, imshow(BWsdil), title('dilated gradient mask');
 
 	%Fill Interior Gaps
 	BWdfill = imfill(BWsdil, 'holes');
-	%figure, imshow(BWdfill);
-	%title('binary image with filled holes');
+	%figure, imshow(BWdfill), title('binary image with filled holes');
 	
 	%Smoothen the Object
 	seD = strel('diamond',1);
@@ -30,6 +29,8 @@ function BWlist = contour(I)
 	Segout(BWoutline) = 255;
 	%figure, imshow(BWoutline), title('outlined original image');
 
-	%Get boundary
+	%Get boundary (biggest object)
 	BWlist = bwboundaries(BWoutline);
-	BWlist = BWlist{1,1};
+    a = (cellfun(@length,BWlist));
+    [~,i] = max(a(:));
+    BWlist = BWlist{i,1};

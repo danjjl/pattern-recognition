@@ -30,7 +30,11 @@ function BWlist = contour(I)
 	%figure, imshow(BWoutline), title('outlined original image');
 
 	%Get boundary (biggest object)
-	BWlist = bwboundaries(BWoutline);
+	BWlist = bwboundaries(BWoutline,8, 'noholes');
     a = (cellfun(@length,BWlist));
     [~,i] = max(a(:));
     BWlist = BWlist{i,1};
+    temp = BWlist(:,1);
+    BWlist(:,1) = BWlist(:,2);%seems to have exchanged x and y
+    BWlist(:,2) = temp*-1;
+    
